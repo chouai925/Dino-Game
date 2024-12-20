@@ -4,11 +4,12 @@ import torch
 import torchvision.transforms as transforms
 import pyautogui
 import time
-import gestureCNN_torch as myNN
+import wc_gestureCNN_torch as myNN
 from PIL import Image
 import json
 import threading
 import os
+import webbrowser
 
 # 初始化參數
 minValue = 70
@@ -46,6 +47,16 @@ gesture_actions = {
     3: ("PUNCH", "space"),  # PUNCH - 跳躍
     4: ("STOP", "down")     # STOP - 蹲下
 }
+
+def init_dino_game():
+    try:
+        webbrowser.open('https://chromedino.com/')
+        print("Opening Chrome Dino game...")
+        time.sleep(2)  # 等待遊戲加載
+        pyautogui.press('space')  # 開始遊戲
+        time.sleep(1)  # 等待遊戲開始
+    except Exception as e:
+        print(f"Error initializing dino game: {e}")
 
 def skinMask(frame, x0, y0, width, height, framecount, plot):
     """皮膚檢測遮罩"""
@@ -199,7 +210,14 @@ def saveROIImg(img):
 def Main():
     """主程序"""
     global guessGesture, mod, binaryMode, bkgrndSubMode, mask, bkgrnd, x0, y0, gestname, saveImg, path, quietMode, takebkgrndSubMask
-    
+
+    # 初始化恐龍遊戲
+    init_dino_game()
+
+    # 設置 pyautogui 的安全設置
+    pyautogui.FAILSAFE = True
+    pyautogui.PAUSE = 0.1  # 設置操作間隔時間
+
     # 字體設置
     font = cv2.FONT_HERSHEY_SIMPLEX
     size = 0.5
