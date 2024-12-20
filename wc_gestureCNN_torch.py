@@ -106,7 +106,7 @@ class GestureDataset(Dataset):
 
 def load_data():
     """載入訓練數據"""
-    path2 = 'D:\\CV_final\\CNNGestureRecognizer-master\\imgfolder_b'
+    path2 = 'D:/chouai/CV_final/CNNGestureRecognizer-master/imgfolder_b'
     images = []
     labels = []
     
@@ -356,12 +356,21 @@ def preprocess_image(img):
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     return img
 
+
 def load_model():
     """加載預訓練的模型"""
     try:
+        device = torch.device("cpu")  # 強制使用 CPU
         model = GestureCNN().to(device)
-        checkpoint = torch.load('D:\\CV_final\\CNNGestureRecognizer-master\\best_model.pth', weights_only=True)
+
+        # 使用 map_location 將模型映射到 CPU
+        checkpoint = torch.load(
+            'D:/chouai/CV_final/CNNGestureRecognizer-master/best_model.pth',
+            map_location=device
+        )
+
         model.load_state_dict(checkpoint['model_state_dict'])
+        model.eval()  # 設置為評估模式
         print("Model loaded successfully")
         return model
     except Exception as e:
