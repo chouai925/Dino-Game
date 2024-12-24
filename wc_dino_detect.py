@@ -52,9 +52,9 @@ def init_dino_game():
     try:
         webbrowser.open('https://chromedino.com/')
         print("Opening Chrome Dino game...")
-        time.sleep(2)  # 等待遊戲加載
-        pyautogui.press('space')  # 開始遊戲
-        time.sleep(1)  # 等待遊戲開始
+        time.sleep(2)
+        pyautogui.press('space')  
+        time.sleep(1) 
     except Exception as e:
         print(f"Error initializing dino game: {e}")
 
@@ -208,7 +208,6 @@ def saveROIImg(img):
     print(f"Saved image: {save_path}")
 
 def Main():
-    """主程序"""
     global guessGesture, mod, binaryMode, bkgrndSubMode, mask, bkgrnd, x0, y0, gestname, saveImg, path, quietMode, takebkgrndSubMask
 
     # 初始化恐龍遊戲
@@ -218,7 +217,6 @@ def Main():
     pyautogui.FAILSAFE = True
     pyautogui.PAUSE = 0.1  # 設置操作間隔時間
 
-    # 字體設置
     font = cv2.FONT_HERSHEY_SIMPLEX
     size = 0.5
     fx = 10
@@ -229,7 +227,6 @@ def Main():
     cap = cv2.VideoCapture(0)
     cv2.namedWindow('Original', cv2.WINDOW_NORMAL)
 
-    # 加載預訓練模型
     print("Loading gesture recognition model...")
     mod = myNN.load_model()
     if mod is None:
@@ -276,7 +273,7 @@ def Main():
             else:
                 mask = skinMask(frame, x0, y0, width, height, framecount, plot)
             
-            # 保存訓練圖像
+       
             if saveImg:
                 saveROIImg(mask)
                 
@@ -285,7 +282,6 @@ def Main():
             cv2.putText(frame, f"Prediction: {myNN.current_gesture}", (10,80),
                        font, 0.7, (0,255,0), 2, 1)
             
-            # 顯示選項菜單
             if not quietMode:
                 cv2.putText(frame, 'Options:', (fx,fy), font, 0.7, (0,255,0), 2, 1)
                 cv2.putText(frame, 'b - Toggle Binary/SkinMask', (fx,fy + fh), font, size, (0,255,0), 1, 1)
@@ -303,7 +299,6 @@ def Main():
                 if action_key:
                     pyautogui.press(action_key)
             
-            # 顯示窗口
             if not quietMode:
                 cv2.imshow('Original', frame)
                 cv2.imshow('ROI', mask)
